@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Codex Todo Lab</title>
+  <title>待办提醒</title>
   <style>
     :root {
       color-scheme: light;
@@ -42,19 +42,40 @@
     }
 
     header {
-      margin-bottom: 24px;
+      margin-bottom: 18px;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 166px;
+      display: flex;
+      align-items: flex-end;
+      padding: 22px;
+      overflow: hidden;
+      border-radius: 24px;
+      background-image:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.76) 42%, rgba(255, 255, 255, 0.18) 100%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(242, 242, 247, 0.65)),
+        url("assets/ios-reminders-hero.png");
+      background-position: center;
+      background-size: cover;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+    }
+
+    .hero-copy {
+      max-width: 560px;
     }
 
     h1 {
       margin: 0 0 8px;
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 800;
       letter-spacing: 0;
     }
 
     p {
       margin: 0;
-      color: var(--muted);
+      color: #636366;
       line-height: 1.5;
     }
 
@@ -70,8 +91,8 @@
 
     form {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 210px auto;
-      gap: 12px;
+      grid-template-columns: minmax(0, 1fr) 200px auto;
+      gap: 10px;
       padding: 16px;
       border-bottom: 0.5px solid var(--line);
     }
@@ -96,7 +117,7 @@
       height: 46px;
       border: 0;
       border-radius: 12px;
-      padding: 0 16px;
+      padding: 0 15px;
       font: inherit;
       font-weight: 650;
       cursor: pointer;
@@ -129,6 +150,7 @@
       color: var(--danger);
       background: transparent;
       border: 0;
+      opacity: 0.82;
     }
 
     .clear-button:hover {
@@ -140,6 +162,8 @@
       color: var(--accent);
       background: transparent;
       border: 0;
+      padding: 0 12px;
+      font-weight: 600;
     }
 
     .reminder-button:hover {
@@ -178,6 +202,10 @@
       border-top: 8px solid #f2f2f7;
     }
 
+    .section.completed-section {
+      background: rgba(242, 242, 247, 0.64);
+    }
+
     .section-header {
       display: flex;
       align-items: center;
@@ -192,7 +220,6 @@
       font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.04em;
-      text-transform: uppercase;
     }
 
     .section-count {
@@ -216,6 +243,11 @@
       padding: 10px 16px;
       background: rgba(255, 255, 255, 0.72);
       border-top: 0.5px solid rgba(209, 209, 214, 0.75);
+    }
+
+    .completed-section li {
+      min-height: 54px;
+      background: rgba(255, 255, 255, 0.46);
     }
 
     li:last-child {
@@ -257,20 +289,27 @@
 
     .completed .task-text {
       color: var(--muted);
+      font-weight: 500;
       text-decoration: line-through;
     }
 
+    .completed .task-reminder {
+      color: #a1a1a6;
+    }
+
     .delete-button {
-      width: 38px;
+      width: 34px;
       padding: 0;
       color: var(--danger);
       background: transparent;
       border: 1px solid transparent;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1;
+      opacity: 0.58;
     }
 
     .delete-button:hover {
+      opacity: 1;
       background: rgba(255, 59, 48, 0.1);
     }
 
@@ -307,50 +346,57 @@
       .alarm-banner {
         grid-template-columns: 1fr;
       }
+
+      .hero {
+        min-height: 150px;
+        padding: 18px;
+      }
     }
   </style>
 </head>
 <body>
   <main>
-    <header>
-      <h1>Codex Todo Lab</h1>
-      <p>A small browser app for practicing frontend edits, preview, reminders, and verification.</p>
+    <header class="hero">
+      <div class="hero-copy">
+        <h1>待办提醒</h1>
+        <p>记录事项，设置提醒，把已完成任务收纳到底部。</p>
+      </div>
     </header>
 
     <div id="alarm-banner" class="alarm-banner" role="status" hidden>
       <span id="alarm-message"></span>
-      <button id="dismiss-alarm" class="dismiss-button" type="button">Dismiss</button>
+      <button id="dismiss-alarm" class="dismiss-button" type="button">知道了</button>
     </div>
 
     <section class="panel" aria-label="Todo list">
       <form id="task-form">
-        <input id="task-input" type="text" autocomplete="off" placeholder="Add a task" aria-label="Task">
-        <input id="reminder-input" type="datetime-local" aria-label="Reminder time">
-        <button class="add-button" type="submit">Add Task</button>
+        <input id="task-input" type="text" autocomplete="off" placeholder="添加事项" aria-label="事项">
+        <input id="reminder-input" type="datetime-local" aria-label="提醒时间">
+        <button class="add-button" type="submit">添加</button>
       </form>
 
       <div class="toolbar">
-        <span id="task-count">0 tasks</span>
-        <button id="enable-notifications" class="reminder-button" type="button">Enable Notifications</button>
-        <button id="clear-completed" class="clear-button" type="button">Clear Completed</button>
+        <span id="task-count">0 项待办</span>
+        <button id="enable-notifications" class="reminder-button" type="button">开启通知</button>
+        <button id="clear-completed" class="clear-button" type="button">清除已完成</button>
       </div>
 
       <section class="section" aria-labelledby="active-heading">
         <div class="section-header">
-          <h2 id="active-heading">To Do</h2>
+          <h2 id="active-heading">待办</h2>
           <span id="active-count" class="section-count">0</span>
         </div>
         <ul id="active-task-list"></ul>
-        <div id="active-empty-state" class="empty">No active tasks.</div>
+        <div id="active-empty-state" class="empty">暂无待办事项。</div>
       </section>
 
-      <section class="section" aria-labelledby="completed-heading">
+      <section class="section completed-section" aria-labelledby="completed-heading">
         <div class="section-header">
-          <h2 id="completed-heading">Completed</h2>
+          <h2 id="completed-heading">已完成</h2>
           <span id="completed-count" class="section-count">0</span>
         </div>
         <ul id="completed-task-list"></ul>
-        <div id="completed-empty-state" class="empty">Completed tasks will appear here.</div>
+        <div id="completed-empty-state" class="empty">完成的事项会收纳在这里。</div>
       </section>
     </section>
   </main>
@@ -404,7 +450,7 @@
       });
 
       const remaining = activeTasks.length;
-      count.textContent = `${remaining} ${remaining === 1 ? "task" : "tasks"} remaining`;
+      count.textContent = `${remaining} 项待办`;
       activeCount.textContent = String(activeTasks.length);
       completedCount.textContent = String(completedTasks.length);
       activeEmpty.hidden = activeTasks.length > 0;
@@ -474,17 +520,17 @@
     }
 
     function reminderLabel(task) {
-      if (!task.reminderAt) return "No reminder";
+      if (!task.reminderAt) return "无提醒";
       const date = new Date(task.reminderAt);
-      const label = new Intl.DateTimeFormat(undefined, {
+      const label = new Intl.DateTimeFormat("zh-CN", {
         month: "short",
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
       }).format(date);
-      if (task.completed) return `Reminder: ${label}`;
-      if (date <= new Date()) return `Due: ${label}`;
-      return `Reminder: ${label}`;
+      if (task.completed) return `提醒：${label}`;
+      if (date <= new Date()) return `已到期：${label}`;
+      return `提醒：${label}`;
     }
 
     function scheduleReminders() {
@@ -512,7 +558,7 @@
       ));
       saveTasks();
 
-      alarmMessage.textContent = `Reminder: ${currentTask.text}`;
+      alarmMessage.textContent = `提醒：${currentTask.text}`;
       alarmBanner.hidden = false;
       playAlarmTone();
       showSystemNotification(currentTask);
@@ -541,26 +587,26 @@
 
     function showSystemNotification(task) {
       if (!("Notification" in window) || Notification.permission !== "granted") return;
-      new Notification("Task reminder", {
+      new Notification("事项提醒", {
         body: task.text,
       });
     }
 
     function updateNotificationButton() {
       if (!("Notification" in window)) {
-        enableNotifications.textContent = "Notifications Unavailable";
+        enableNotifications.textContent = "通知不可用";
         enableNotifications.disabled = true;
         return;
       }
 
       if (Notification.permission === "granted") {
-        enableNotifications.textContent = "Notifications Enabled";
+        enableNotifications.textContent = "通知已开启";
         enableNotifications.disabled = true;
       } else if (Notification.permission === "denied") {
-        enableNotifications.textContent = "Notifications Blocked";
+        enableNotifications.textContent = "通知已被阻止";
         enableNotifications.disabled = true;
       } else {
-        enableNotifications.textContent = "Enable Notifications";
+        enableNotifications.textContent = "开启通知";
         enableNotifications.disabled = false;
       }
     }
