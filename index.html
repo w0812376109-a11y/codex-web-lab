@@ -7,17 +7,18 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f4f7fb;
-      --panel: #ffffff;
-      --text: #172033;
-      --muted: #657086;
-      --line: #dfe6f0;
-      --accent: #1f7a8c;
-      --accent-dark: #155d6c;
-      --danger: #b42318;
-      --done: #52796f;
-      --warning: #a15c07;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg: #f2f2f7;
+      --panel: rgba(255, 255, 255, 0.92);
+      --text: #1c1c1e;
+      --muted: #8e8e93;
+      --line: #d1d1d6;
+      --accent: #007aff;
+      --accent-dark: #005ecb;
+      --danger: #ff3b30;
+      --done: #34c759;
+      --warning: #ff9500;
+      --shadow: rgba(0, 0, 0, 0.08);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     }
 
     * {
@@ -27,14 +28,17 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
+      background:
+        radial-gradient(circle at 18% -8%, rgba(0, 122, 255, 0.15), transparent 30%),
+        radial-gradient(circle at 92% 2%, rgba(52, 199, 89, 0.13), transparent 25%),
+        var(--bg);
       color: var(--text);
     }
 
     main {
       width: min(760px, calc(100vw - 32px));
       margin: 0 auto;
-      padding: 48px 0;
+      padding: 44px 0;
     }
 
     header {
@@ -43,8 +47,8 @@
 
     h1 {
       margin: 0 0 8px;
-      font-size: 32px;
-      font-weight: 750;
+      font-size: 34px;
+      font-weight: 800;
       letter-spacing: 0;
     }
 
@@ -56,40 +60,42 @@
 
     .panel {
       background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: 0 18px 48px rgba(38, 54, 77, 0.08);
+      border: 0.5px solid rgba(60, 60, 67, 0.16);
+      border-radius: 22px;
+      box-shadow: 0 18px 44px var(--shadow);
       overflow: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     form {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 210px auto;
       gap: 12px;
-      padding: 18px;
-      border-bottom: 1px solid var(--line);
+      padding: 16px;
+      border-bottom: 0.5px solid var(--line);
     }
 
     input {
       min-width: 0;
-      height: 44px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 0 13px;
+      height: 46px;
+      border: 0;
+      border-radius: 12px;
+      padding: 0 14px;
       font-size: 16px;
+      background: #f2f2f7;
       color: var(--text);
       outline: none;
     }
 
     input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(31, 122, 140, 0.16);
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.18);
     }
 
     button {
-      height: 44px;
+      height: 46px;
       border: 0;
-      border-radius: 6px;
+      border-radius: 12px;
       padding: 0 16px;
       font: inherit;
       font-weight: 650;
@@ -99,6 +105,7 @@
     .add-button {
       color: #ffffff;
       background: var(--accent);
+      box-shadow: 0 8px 18px rgba(0, 122, 255, 0.22);
     }
 
     .add-button:hover {
@@ -110,32 +117,33 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 12px 18px;
-      border-bottom: 1px solid var(--line);
+      padding: 12px 16px;
+      border-bottom: 0.5px solid var(--line);
       color: var(--muted);
       font-size: 14px;
+      flex-wrap: wrap;
     }
 
     .clear-button {
       height: 34px;
       color: var(--danger);
       background: transparent;
-      border: 1px solid rgba(180, 35, 24, 0.28);
+      border: 0;
     }
 
     .clear-button:hover {
-      background: rgba(180, 35, 24, 0.08);
+      background: rgba(255, 59, 48, 0.1);
     }
 
     .reminder-button {
       height: 34px;
-      color: var(--accent-dark);
+      color: var(--accent);
       background: transparent;
-      border: 1px solid rgba(31, 122, 140, 0.28);
+      border: 0;
     }
 
     .reminder-button:hover {
-      background: rgba(31, 122, 140, 0.08);
+      background: rgba(0, 122, 255, 0.1);
     }
 
     .alarm-banner {
@@ -145,10 +153,10 @@
       gap: 12px;
       margin-bottom: 14px;
       padding: 12px 14px;
-      color: #4f2f03;
-      background: #fff4d7;
-      border: 1px solid #f3d48b;
-      border-radius: 8px;
+      color: #4a2c00;
+      background: rgba(255, 204, 0, 0.22);
+      border: 0.5px solid rgba(255, 149, 0, 0.24);
+      border-radius: 16px;
     }
 
     .alarm-banner[hidden] {
@@ -159,6 +167,38 @@
       height: 34px;
       color: #ffffff;
       background: var(--warning);
+      border-radius: 10px;
+    }
+
+    .section {
+      padding: 14px 0 4px;
+    }
+
+    .section + .section {
+      border-top: 8px solid #f2f2f7;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px 10px;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .section-count {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
     }
 
     ul {
@@ -172,9 +212,10 @@
       grid-template-columns: 28px 1fr auto;
       align-items: center;
       gap: 12px;
-      min-height: 58px;
-      padding: 10px 18px;
-      border-bottom: 1px solid var(--line);
+      min-height: 62px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.72);
+      border-top: 0.5px solid rgba(209, 209, 214, 0.75);
     }
 
     li:last-child {
@@ -186,6 +227,10 @@
       height: 22px;
       accent-color: var(--done);
       cursor: pointer;
+    }
+
+    .completed .toggle {
+      accent-color: var(--muted);
     }
 
     .task-text {
@@ -226,20 +271,20 @@
     }
 
     .delete-button:hover {
-      border-color: rgba(180, 35, 24, 0.25);
-      background: rgba(180, 35, 24, 0.08);
+      background: rgba(255, 59, 48, 0.1);
     }
 
     .empty {
-      padding: 34px 18px;
+      padding: 24px 16px 30px;
       text-align: center;
       color: var(--muted);
+      font-size: 15px;
     }
 
     @media (max-width: 560px) {
       main {
         width: min(100vw - 24px, 760px);
-        padding: 28px 0;
+        padding: 26px 0;
       }
 
       h1 {
@@ -290,8 +335,23 @@
         <button id="clear-completed" class="clear-button" type="button">Clear Completed</button>
       </div>
 
-      <ul id="task-list"></ul>
-      <div id="empty-state" class="empty">No tasks yet.</div>
+      <section class="section" aria-labelledby="active-heading">
+        <div class="section-header">
+          <h2 id="active-heading">To Do</h2>
+          <span id="active-count" class="section-count">0</span>
+        </div>
+        <ul id="active-task-list"></ul>
+        <div id="active-empty-state" class="empty">No active tasks.</div>
+      </section>
+
+      <section class="section" aria-labelledby="completed-heading">
+        <div class="section-header">
+          <h2 id="completed-heading">Completed</h2>
+          <span id="completed-count" class="section-count">0</span>
+        </div>
+        <ul id="completed-task-list"></ul>
+        <div id="completed-empty-state" class="empty">Completed tasks will appear here.</div>
+      </section>
     </section>
   </main>
 
@@ -300,9 +360,13 @@
     const form = document.querySelector("#task-form");
     const input = document.querySelector("#task-input");
     const reminderInput = document.querySelector("#reminder-input");
-    const list = document.querySelector("#task-list");
+    const activeList = document.querySelector("#active-task-list");
+    const completedList = document.querySelector("#completed-task-list");
     const count = document.querySelector("#task-count");
-    const empty = document.querySelector("#empty-state");
+    const activeCount = document.querySelector("#active-count");
+    const completedCount = document.querySelector("#completed-count");
+    const activeEmpty = document.querySelector("#active-empty-state");
+    const completedEmpty = document.querySelector("#completed-empty-state");
     const clearCompleted = document.querySelector("#clear-completed");
     const enableNotifications = document.querySelector("#enable-notifications");
     const alarmBanner = document.querySelector("#alarm-banner");
@@ -325,50 +389,65 @@
     }
 
     function renderTasks() {
-      list.innerHTML = "";
+      activeList.innerHTML = "";
+      completedList.innerHTML = "";
 
-      tasks.forEach((task) => {
-        const item = document.createElement("li");
-        item.className = task.completed ? "completed" : "";
+      const activeTasks = tasks.filter((task) => !task.completed);
+      const completedTasks = tasks.filter((task) => task.completed);
 
-        const checkbox = document.createElement("input");
-        checkbox.className = "toggle";
-        checkbox.type = "checkbox";
-        checkbox.checked = task.completed;
-        checkbox.setAttribute("aria-label", `Toggle ${task.text}`);
-        checkbox.addEventListener("change", () => toggleTask(task.id));
-
-        const content = document.createElement("div");
-        content.className = "task-content";
-
-        const text = document.createElement("span");
-        text.className = "task-text";
-        text.textContent = task.text;
-
-        const reminder = document.createElement("span");
-        reminder.className = "task-reminder";
-        reminder.textContent = reminderLabel(task);
-        if (task.reminderAt && Date.parse(task.reminderAt) <= Date.now() && !task.completed) {
-          reminder.classList.add("due");
-        }
-
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-button";
-        deleteButton.type = "button";
-        deleteButton.textContent = "×";
-        deleteButton.setAttribute("aria-label", `Delete ${task.text}`);
-        deleteButton.addEventListener("click", () => deleteTask(task.id));
-
-        content.append(text, reminder);
-        item.append(checkbox, content, deleteButton);
-        list.append(item);
+      activeTasks.forEach((task) => {
+        activeList.append(createTaskItem(task));
       });
 
-      const remaining = tasks.filter((task) => !task.completed).length;
+      completedTasks.forEach((task) => {
+        completedList.append(createTaskItem(task));
+      });
+
+      const remaining = activeTasks.length;
       count.textContent = `${remaining} ${remaining === 1 ? "task" : "tasks"} remaining`;
-      empty.hidden = tasks.length > 0;
-      clearCompleted.disabled = tasks.every((task) => !task.completed);
+      activeCount.textContent = String(activeTasks.length);
+      completedCount.textContent = String(completedTasks.length);
+      activeEmpty.hidden = activeTasks.length > 0;
+      completedEmpty.hidden = completedTasks.length > 0;
+      clearCompleted.disabled = completedTasks.length === 0;
       scheduleReminders();
+    }
+
+    function createTaskItem(task) {
+      const item = document.createElement("li");
+      item.className = task.completed ? "completed" : "";
+
+      const checkbox = document.createElement("input");
+      checkbox.className = "toggle";
+      checkbox.type = "checkbox";
+      checkbox.checked = task.completed;
+      checkbox.setAttribute("aria-label", `Toggle ${task.text}`);
+      checkbox.addEventListener("change", () => toggleTask(task.id));
+
+      const content = document.createElement("div");
+      content.className = "task-content";
+
+      const text = document.createElement("span");
+      text.className = "task-text";
+      text.textContent = task.text;
+
+      const reminder = document.createElement("span");
+      reminder.className = "task-reminder";
+      reminder.textContent = reminderLabel(task);
+      if (task.reminderAt && Date.parse(task.reminderAt) <= Date.now() && !task.completed) {
+        reminder.classList.add("due");
+      }
+
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "delete-button";
+      deleteButton.type = "button";
+      deleteButton.textContent = "×";
+      deleteButton.setAttribute("aria-label", `Delete ${task.text}`);
+      deleteButton.addEventListener("click", () => deleteTask(task.id));
+
+      content.append(text, reminder);
+      item.append(checkbox, content, deleteButton);
+      return item;
     }
 
     function addTask(text, reminderAt) {
