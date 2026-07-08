@@ -97,6 +97,10 @@
       border-bottom: 0.5px solid var(--line);
     }
 
+    .task-input {
+      grid-column: 1 / -1;
+    }
+
     input {
       min-width: 0;
       height: 46px;
@@ -282,6 +286,15 @@
       line-height: 1.35;
     }
 
+    .task-location {
+      display: block;
+      margin-top: 4px;
+      color: #636366;
+      font-size: 13px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
     .task-reminder.due {
       color: var(--warning);
       font-weight: 650;
@@ -294,6 +307,10 @@
     }
 
     .completed .task-reminder {
+      color: #a1a1a6;
+    }
+
+    .completed .task-location {
       color: #a1a1a6;
     }
 
@@ -338,6 +355,10 @@
         width: 100%;
       }
 
+      .task-input {
+        grid-column: auto;
+      }
+
       .toolbar {
         align-items: flex-start;
         flex-direction: column;
@@ -370,7 +391,8 @@
 
     <section class="panel" aria-label="Todo list">
       <form id="task-form">
-        <input id="task-input" type="text" autocomplete="off" placeholder="添加事项" aria-label="事项">
+        <input id="task-input" class="task-input" type="text" autocomplete="off" placeholder="添加事项" aria-label="事项">
+        <input id="location-input" type="text" autocomplete="off" placeholder="任务地点" aria-label="任务地点">
         <input id="reminder-input" type="datetime-local" aria-label="提醒时间">
         <button class="add-button" type="submit">添加</button>
       </form>
@@ -405,6 +427,7 @@
     const storageKey = "codex-todo-lab.tasks";
     const form = document.querySelector("#task-form");
     const input = document.querySelector("#task-input");
+    const locationInput = document.querySelector("#location-input");
     const reminderInput = document.querySelector("#reminder-input");
     const activeList = document.querySelector("#active-task-list");
     const completedList = document.querySelector("#completed-task-list");
@@ -477,6 +500,11 @@
       text.className = "task-text";
       text.textContent = task.text;
 
+      const location = document.createElement("span");
+      location.className = "task-location";
+      location.textContent = task.location ? `地点：${task.location}` : "";
+      location.hidden = !task.location;
+
       const reminder = document.createElement("span");
       reminder.className = "task-reminder";
       reminder.textContent = reminderLabel(task);
@@ -491,14 +519,14 @@
       deleteButton.setAttribute("aria-label", `Delete ${task.text}`);
       deleteButton.addEventListener("click", () => deleteTask(task.id));
 
-      content.append(text, reminder);
+      content.append(text, location, reminder);
       item.append(checkbox, content, deleteButton);
       return item;
     }
 
-    function addTask(text, reminderAt) {
+    function addTask(text, location, reminderAt) {
       tasks = [
-        { id: crypto.randomUUID(), text, reminderAt, completed: false, reminded: false },
+        { id: crypto.randomUUID(), text, location, reminderAt, completed: false, reminded: false },
         ...tasks,
       ];
       saveTasks();
@@ -614,9 +642,11 @@
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       const text = input.value.trim();
+      const location = locationInput.value.trim();
       if (!text) return;
-      addTask(text, reminderInput.value || null);
+      addTask(text, location || null, reminderInput.value || null);
       input.value = "";
+      locationInput.value = "";
       reminderInput.value = "";
       input.focus();
     });
